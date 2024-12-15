@@ -12,30 +12,7 @@ let calculate = false;
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
     let pressedButton = button.id;
-    
-
-        if (pressedButton === "clear") {
-            firstNumber = "";
-            secondNumber = "";
-            operator = "";
-            display.textContent = "";
-        }
-      
-        if (!operator) {
-            getFirstNumber(pressedButton);
-        } else {
-            getSecondNumber(pressedButton);
-        }
-
-        if (calculate === true){
-            operate(firstNumber, operator, secondNumber);
-            calculate = false;
-            firstNumber = "";
-            secondNumber = "";
-            operator = "";
-              
-        }
-        console.log(calculate);
+    calculation(pressedButton)   
     })
 })
 
@@ -84,8 +61,8 @@ function getSecondNumber (selectedButton) {
         return secondNumber, calculate;
 
     } else if (isNumber) {
-            secondNumber += selectedButton;
-            display.textContent = `${firstNumber} ${operator} ${secondNumber}`;
+        secondNumber += selectedButton;
+        display.textContent = `${firstNumber} ${operator} ${secondNumber}`;
     
     } else {
         display.textContent = `${firstNumber} ${operator} ${secondNumber}`;
@@ -121,7 +98,28 @@ function operate(firstNumber, operator, secondNumber) {
         display.textContent = `${result}`;
         return result;
     }
+}
 
+function calculation(selectedButton) {
+    if (selectedButton === "clear") {
+        firstNumber = "";
+        secondNumber = "";
+        operator = "";
+        display.textContent = "";
+    }
+  
+    if (!operator) {
+        getFirstNumber(selectedButton);
+    } else {
+        getSecondNumber(selectedButton);
+    }
 
+    if (calculate === true){
+        operate(firstNumber, operator, secondNumber);
+        calculate = false;
+        firstNumber = "";
+        secondNumber = "";
+        operator = "";      
+    }
 }
 
