@@ -6,120 +6,160 @@ const operators = ["+", "-", "*", "/"];
 
 let firstNumber = "";
 let operator = "";
+let nextOperator = "";
 let secondNumber = "";
-let calculate = false;
+let displayText = "";
+let readyToCalculate = false;
+let result = undefined;
+
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
     let pressedButton = button.id;
-    calculation(pressedButton)   
+        getCalculation(pressedButton);
     })
 })
 
-function getFirstNumber(selectedButton) {
-    // RULES
-    // checking number is selected
+function clear(selectedButton) {
+
     const isNumber = numbers.includes(selectedButton);
-    // checking if first character in first number string is number
-    const firstCharacterIsNumber = numbers.includes(firstNumber[0]);
-    // checking if operator is selected
-    const isOperator = operators.includes(selectedButton);
-    
-    if (firstNumber === "" && selectedButton === "0") {
-        display.textContent = `${firstNumber}`;
-    
-    } else if (firstCharacterIsNumber && isOperator) {
-        operator = selectedButton;
-        display.textContent = `${firstNumber} ${operator}`;
-        return firstNumber, operator
-
-    } else if (isNumber && selectedButton !== "=") {
-        firstNumber += selectedButton;
-        display.textContent = `${firstNumber}`;
-
-    } else {
-        display.textContent = `${firstNumber}`;
-    }
-}
-
-function getSecondNumber (selectedButton) {
-    // RULES
-    // checking number is selected
-    const isNumber = numbers.includes(selectedButton);
-    // checking if first character in second number string is number
-    const firstCharacterIsNumber = numbers.includes(secondNumber[0]);
-    // checking if operator is selected
     const isOperator = operators.includes(selectedButton);
 
-    if (secondNumber === "" && selectedButton === "0") {
-        display.textContent = `${firstNumber} ${operator}`;
-        
-    
-    } else if (firstCharacterIsNumber && selectedButton === "=") {
-        calculate = true;
-        display.textContent = `${firstNumber} ${operator} ${secondNumber}`;
-        return secondNumber, calculate;
-
-    } else if (isNumber) {
-        secondNumber += selectedButton;
-        display.textContent = `${firstNumber} ${operator} ${secondNumber}`;
-    
-    } else {
-        display.textContent = `${firstNumber} ${operator} ${secondNumber}`;
-    }
-}
-
-
-const add = (a, b) => a + b;
-const substract = (a, b) => a - b;
-const multiply = (a, b) => a * b;
-const divide = (a, b) => a / b;
-
-
-
-function operate(firstNumber, operator, secondNumber) {
-    firstNumber = parseInt(firstNumber);
-    secondNumber = parseInt(secondNumber);
-    let result = 0
-    if (operator === "+") {
-        result = add(firstNumber, secondNumber);
-        display.textContent = `${result}`;
-        return result;
-    } else if (operator === "-") {
-        result = substract(firstNumber, secondNumber);
-        display.textContent = `${result}`;
-        return result;
-    } else if (operator === "*") {
-        result = multiply(firstNumber, secondNumber);
-        display.textContent = `${result}`;
-        return result;
-    } else if (operator === "/") {
-        result = divide(firstNumber, secondNumber);
-        display.textContent = `${result}`;
-        return result;
-    }
-}
-
-function calculation(selectedButton) {
-    if (selectedButton === "clear") {
-        firstNumber = "";
+    if (nextOperator && result) {
+        firstNumber = result;
+        operator = nextOperator;
+        nextOperator = "";
         secondNumber = "";
+        displayText = firstNumber + secondNumber;
+        result = undefined;
+        readyToCalculate = false;
+    }
+
+    if (selectedButton === "clear" || (result && isNumber)) {
+        firstNumber = "";
         operator = "";
-        display.textContent = "";
-    }
-  
-    if (!operator) {
-        getFirstNumber(selectedButton);
-    } else {
-        getSecondNumber(selectedButton);
+        nextOperator = "";
+        secondNumber = "";
+        displayText = "";
+        result = undefined;
+        readyToCalculate = false;
     }
 
-    if (calculate === true){
-        operate(firstNumber, operator, secondNumber);
-        calculate = false;
-        firstNumber = "";
+    if (result && isOperator) {
+        firstNumber = result;
+        operator = "";
         secondNumber = "";
-        operator = "";      
+        displayText = firstNumber;
+        result = undefined;
+        readyToCalculate = false;
+    } 
+};
+
+
+function getFirstNumber(selectedButton) {
+
+    const isNumber = numbers.includes(selectedButton);
+    
+    if (!firstNumber && selectedButton === "0") {
+      firstNumber = firstNumber;
+
+    } else if (isNumber && !operator) {
+      firstNumber += selectedButton;
+
+    } else {
+      firstNumber = firstNumber;
     }
+
+    displayText = firstNumber;
+    return firstNumber
 }
 
+
+function getOperator (selectedButton) {
+
+    const isOperator = operators.includes(selectedButton);
+
+    if (operator && secondNumber) {
+        operator = operator
+
+    } else if (operator && isOperator) {
+        operator = selectedButton;
+
+    } else if (isOperator && firstNumber) {
+        operator = selectedButton;    
+    } 
+
+    displayText = firstNumber + operator;
+    return operator;
+};
+
+
+function getSecondNumber(selectedButton) {
+
+    const isNumber = numbers.includes(selectedButton);
+    const isOperator = operators.includes(selectedButton);
+
+    if (secondNumber && selectedButton === "=") {
+        readyToCalculate = true;
+
+    } else if (secondNumber && isOperator) {
+        nextOperator = selectedButton;
+        readyToCalculate = true;
+    }
+
+    if (firstNumber && operator && !readyToCalculate) {
+        if (!secondNumber && selectedButton === "0") {
+            secondNumber = secondNumber;
+
+        } else if (isNumber) {
+            secondNumber += selectedButton;
+        }
+    }
+
+    displayText = firstNumber + operator + secondNumber;
+    return secondNumber;
+
+};
+
+
+function operate(a, b, operator) {
+
+    a = parseInt(a);
+    b = parseInt(b);
+
+   const mathCalculations = [
+    {math: "+", calculate: function (a, b) {return a + b}},
+    {math: "-", calculate: function (a, b) {return a - b}},
+    {math: "*", calculate: function (a, b) {return a * b}},
+    {math: "/", calculate: function (a, b) {return a / b}}
+   ];
+
+   
+    result = mathCalculations.filter((calc) => calc.math === operator)
+                             .map((calc) => calc.calculate(a, b))
+                             .join("");
+
+    if (nextOperator) {
+        displayText = result + nextOperator;
+    } else {
+        displayText = result;
+    }
+
+   return result;
+};
+
+
+function getCalculation (selectedButton) {
+  
+    clear(selectedButton);
+    getFirstNumber(selectedButton);
+    getOperator(selectedButton);
+    getSecondNumber(selectedButton);
+ 
+    if (readyToCalculate) {
+        operate(firstNumber, secondNumber, operator);
+    } 
+ 
+    display.textContent = `${displayText}`;
+    
+ };
