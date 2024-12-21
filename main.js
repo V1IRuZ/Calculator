@@ -30,7 +30,7 @@ function clear(selectedButton) {
         operator = nextOperator;
         nextOperator = "";
         secondNumber = "";
-        displayText = firstNumber + secondNumber;
+        displayText = firstNumber + operator;
         result = undefined;
         readyToCalculate = false;
     }
