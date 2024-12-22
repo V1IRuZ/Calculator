@@ -4,14 +4,16 @@ const display = document.querySelector(".display");
 const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const operators = ["+", "-", "*", "/"];
 
-let firstNumber = "";
+let firstNumber = "0";
 let operator = "";
 let nextOperator = "";
 let secondNumber = "";
-let displayText = "";
+let displayText = firstNumber;
 let readyToCalculate = false;
 let result = undefined;
+let decimal = false;
 
+display.textContent = `${displayText}`;
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -30,17 +32,17 @@ function clear(selectedButton) {
         operator = nextOperator;
         nextOperator = "";
         secondNumber = "";
-        displayText = firstNumber + operator;
+        displayText = firstNumber + secondNumber;
         result = undefined;
         readyToCalculate = false;
     }
 
     if (selectedButton === "clear" || (result && isNumber)) {
-        firstNumber = "";
+        firstNumber = "0";
         operator = "";
         nextOperator = "";
         secondNumber = "";
-        displayText = "";
+        displayText = firstNumber;
         result = undefined;
         readyToCalculate = false;
     }
@@ -59,9 +61,14 @@ function clear(selectedButton) {
 function getFirstNumber(selectedButton) {
 
     const isNumber = numbers.includes(selectedButton);
+
+    if (!decimal && selectedButton === ".") {
+        firstNumber += selectedButton
+        decimal = true
+    }
     
-    if (!firstNumber && selectedButton === "0") {
-      firstNumber = firstNumber;
+    if (firstNumber === "0" && (!operator && isNumber)) {
+      firstNumber = selectedButton;
 
     } else if (isNumber && !operator) {
       firstNumber += selectedButton;
