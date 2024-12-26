@@ -182,7 +182,7 @@ function operate(a, b, operator) {
         } else {
             let thereIsDecimal = checkCalculate.result.split("").includes(".")
             if (thereIsDecimal) {
-                checkCalculate.result = parseFloat(checkCalculate.result).toFixed(10);
+                checkCalculate.result = parseFloat(checkCalculate.result).toFixed(10).slice(0, 10);
                 displayText = checkCalculate.result;
             } else {
                 displayText = "TOO BIG A NUMBER =(";
