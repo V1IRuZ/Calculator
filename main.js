@@ -1,172 +1,217 @@
 const buttons = document.querySelectorAll("button");
 const display = document.querySelector(".display");
 
-const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-const operators = ["+", "-", "*", "/"];
+const firstNumber = {
+    value: "0",
+    active: true,
+    decimal: false
+};
 
-let firstNumber = "0";
-let operator = "";
-let nextOperator = "";
-let secondNumber = "";
-let displayText = firstNumber;
-let readyToCalculate = false;
-let result = undefined;
-let decimal = false;
+const operator = {
+    value: "",
+    nextValue: "",
+    active: false,
+};
 
-display.textContent = `${displayText}`;
+const secondNumber = {
+    value: "0",
+    active: false,
+    decimal: false
+};
+
+const checkCalculate = {
+    result: undefined,
+    ready: false
+};
+
+let displayText = "";
+display.textContent = firstNumber.value;
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
-    let pressedButton = button.id;
-        getCalculation(pressedButton);
+    const pressedButton = button.id;
+    const pressedClass = button.className;
+        getCalculation(pressedButton, pressedClass);
     })
-})
+});
 
-function clear(selectedButton) {
 
-    const isNumber = numbers.includes(selectedButton);
-    const isOperator = operators.includes(selectedButton);
-
-    if (nextOperator && result) {
-        firstNumber = result;
-        operator = nextOperator;
-        nextOperator = "";
-        secondNumber = "";
-        displayText = firstNumber + secondNumber;
-        result = undefined;
-        readyToCalculate = false;
-    }
-
-    if (selectedButton === "clear" || (result && isNumber)) {
-        firstNumber = "0";
-        operator = "";
-        nextOperator = "";
-        secondNumber = "";
-        displayText = firstNumber;
-        result = undefined;
-        readyToCalculate = false;
-    }
-
-    if (result && isOperator) {
-        firstNumber = result;
-        operator = "";
-        secondNumber = "";
-        displayText = firstNumber;
-        result = undefined;
-        readyToCalculate = false;
+function clear(selectedButton, selectedClass) {
+    if (checkCalculate.result && operator.nextValue) {
+        firstNumber.value = checkCalculate.result;
+        firstNumber.active = false;
+        operator.value = operator.nextValue;
+        operator.active = false;
+        operator.nextValue = "";
+        secondNumber.value = "0";
+        secondNumber.active = true;
+        secondNumber.decimal = false;
+        checkCalculate.result = undefined;
+        checkCalculate.ready = false;
+        displayText = secondNumber.value;
     } 
-};
 
-
-function getFirstNumber(selectedButton) {
-
-    const isNumber = numbers.includes(selectedButton);
-
-    if (!decimal && selectedButton === ".") {
-        firstNumber += selectedButton
-        decimal = true
+    if (selectedButton === "clear" || (checkCalculate.result && selectedClass === "numbers")) {
+        firstNumber.value = "0";
+        firstNumber.active = true;
+        firstNumber.decimal = false;
+        operator.value = "";
+        operator.nextValue = "";
+        operator.active = false;
+        secondNumber.value = "0";
+        secondNumber.active = false;
+        secondNumber.decimal = false;
+        checkCalculate.result = undefined;
+        checkCalculate.ready = false;
+        displayText = firstNumber.value;
     }
+
+    if (checkCalculate.result && selectedClass === "operators") {
+        firstNumber.value = checkCalculate.result;
+        firstNumber.active = false;
+        operator.active = true;
+        operator.value = "";
+        operator.nextValue = "";
+        secondNumber.value = "0";
+        secondNumber.active = false;
+        secondNumber.decimal = false;
+        checkCalculate.result = undefined;
+        checkCalculate.ready = false;
+        displayText = firstNumber.value;
+    }
+};
     
-    if (firstNumber === "0" && (!operator && isNumber)) {
-      firstNumber = selectedButton;
 
-    } else if (isNumber && !operator) {
-      firstNumber += selectedButton;
-
-    } else {
-      firstNumber = firstNumber;
+function getFirstNumber(selectedButton, selectedClass) {
+    if (firstNumber.value.length < 10) {
+        if (selectedClass === "decimal" && !firstNumber.decimal) {
+            firstNumber.value += selectedButton;
+            firstNumber.decimal = true;
+        }
+        
+        if (selectedClass === "numbers") {
+            if (firstNumber.value === "0") {
+                firstNumber.value = selectedButton;
+            } else {
+                firstNumber.value += selectedButton;
+            }  
+        }
     }
-
-    displayText = firstNumber;
-    return firstNumber
-}
-
-
-function getOperator (selectedButton) {
-
-    const isOperator = operators.includes(selectedButton);
-
-    if (operator && secondNumber) {
-        operator = operator
-
-    } else if (operator && isOperator) {
-        operator = selectedButton;
-
-    } else if (isOperator && firstNumber) {
-        operator = selectedButton;    
-    } 
-
-    displayText = firstNumber + operator;
-    return operator;
+  
+    operator.active = true;
+    displayText = firstNumber.value;
+    
 };
 
 
-function getSecondNumber(selectedButton) {
-
-    const isNumber = numbers.includes(selectedButton);
-    const isOperator = operators.includes(selectedButton);
-
-    if (secondNumber && selectedButton === "=") {
-        readyToCalculate = true;
-
-    } else if (secondNumber && isOperator) {
-        nextOperator = selectedButton;
-        readyToCalculate = true;
+function getOperator(selectedButton, selectedClass) {
+    
+    if (selectedClass === "operators") {
+        operator.value = selectedButton;    
+        firstNumber.active = false;
+        secondNumber.active = true;
     }
 
-    if (firstNumber && operator && !readyToCalculate) {
-        if (!secondNumber && selectedButton === "0") {
-            secondNumber = secondNumber;
+    displayText = secondNumber.value;
+};
 
-        } else if (isNumber) {
-            secondNumber += selectedButton;
+
+function getSecondNumber(selectedButton, selectedClass) {
+
+    if (selectedButton === "=") {
+        checkCalculate.ready = true;
+    } else if (selectedClass === "operators") {
+        checkCalculate.ready = true;
+        operator.nextValue = selectedButton;
+    }
+
+    if (secondNumber.value.length < 10) {    
+        if (selectedClass === "decimal" && !secondNumber.decimal) {
+            secondNumber.value += selectedButton;
+            secondNumber.decimal = true;
+        }
+    
+        if (selectedClass === "numbers") {
+            if (secondNumber.value === "0") {
+                secondNumber.value = selectedButton;
+            } else {
+                secondNumber.value += selectedButton;
+            }  
         }
     }
 
-    displayText = firstNumber + operator + secondNumber;
-    return secondNumber;
+    operator.active = false;
+    displayText = secondNumber.value; 
+};
 
+
+function stringToNumber(string) {
+
+    isFloatNum = string.split("").includes(".");
+    if (isFloatNum) {
+        return parseFloat(string);
+    } else {
+        return parseInt(string);
+    }
 };
 
 
 function operate(a, b, operator) {
 
-    a = parseInt(a);
-    b = parseInt(b);
+    a = stringToNumber(a);
+    b = stringToNumber(b);
 
-   const mathCalculations = [
+    const mathCalculations = [
     {math: "+", calculate: function (a, b) {return a + b}},
     {math: "-", calculate: function (a, b) {return a - b}},
     {math: "*", calculate: function (a, b) {return a * b}},
     {math: "/", calculate: function (a, b) {return a / b}}
-   ];
+    ];
 
-   
-    result = mathCalculations.filter((calc) => calc.math === operator)
-                             .map((calc) => calc.calculate(a, b))
-                             .join("");
-
-    if (nextOperator) {
-        displayText = result + nextOperator;
+    if ((a === 0 || b === 0) && operator === "/") {
+        displayText = "Nice try =)";
+        checkCalculate.result = "0";
     } else {
-        displayText = result;
-    }
+        checkCalculate.result = mathCalculations
+        .filter((calc) => calc.math === operator)
+        .map((calc) => calc.calculate(a, b))
+        .join("");
 
-   return result;
+        if (checkCalculate.result.length < 11) {
+            displayText = checkCalculate.result;
+        } else {
+            let thereIsDecimal = checkCalculate.result.split("").includes(".")
+            if (thereIsDecimal) {
+                checkCalculate.result = parseFloat(checkCalculate.result).toFixed(10);
+                displayText = checkCalculate.result;
+            } else {
+                displayText = "TOO BIG A NUMBER =(";
+                checkCalculate.result = "0";
+            }   
+        }
+    }
 };
 
 
-function getCalculation (selectedButton) {
-  
-    clear(selectedButton);
-    getFirstNumber(selectedButton);
-    getOperator(selectedButton);
-    getSecondNumber(selectedButton);
- 
-    if (readyToCalculate) {
-        operate(firstNumber, secondNumber, operator);
-    } 
- 
-    display.textContent = `${displayText}`;
+function getCalculation(selectedButton, selectedClass) {
+
+    clear(selectedButton, selectedClass);
+
+    if (secondNumber.active) {
+        getSecondNumber(selectedButton, selectedClass);
+    }
     
- };
+    if (operator.active) {
+        getOperator(selectedButton, selectedClass);
+    }
+        
+    if (firstNumber.active) {
+        getFirstNumber(selectedButton, selectedClass);
+    } 
+
+    if (checkCalculate.ready) {
+        operate(firstNumber.value, secondNumber.value, operator.value);
+    }
+
+    display.textContent = displayText;
+};
