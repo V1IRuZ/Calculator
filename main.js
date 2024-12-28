@@ -62,8 +62,8 @@ document.body.addEventListener("keydown", (e) => {
     } else if (e.code === "Space" || e.code === "Enter") {
         e.preventDefault();
         keyPressed = "=";
-    } else if (e.code = "Backspace") {
-        keyPressed = "backspace";
+    } else if (e.code === "Backspace") {
+        keyPressed = "backspace"
     }
 
     getCalculation(keyPressed, keyClass);
