@@ -35,8 +35,8 @@ const checkCalculate = {
     ready: false
 };
 
-let displayText = "";
-display.textContent = firstNumber.value;
+let displayText = firstNumber.value;
+display.textContent = displayText;
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -53,7 +53,6 @@ document.body.addEventListener("keydown", (e) => {
     const isOperator = operators.includes(e.key);
     let keyPressed = undefined;
     let keyClass = undefined;
-
 
     if (isNumber) {
         keyPressed = e.key;
@@ -73,6 +72,8 @@ document.body.addEventListener("keydown", (e) => {
         keyPressed = "=";
     } else if (e.code === "Backspace") {
         keyPressed = "backspace";
+    } else if (e.code === "KeyN") {
+        keyPressed = "negative";
     }
 
     getCalculation(keyPressed, keyClass);
@@ -310,8 +311,8 @@ function getCalculation(selectedButton, selectedClass) {
     } 
 
     if (checkCalculate.ready) {
-        const firstNum = firstNumber.negative.value + firstNumber.value
-        const secondNum = secondNumber.negative.value + secondNumber.value
+        const firstNum = firstNumber.negative.value + firstNumber.value;
+        const secondNum = secondNumber.negative.value + secondNumber.value;
         const opr = operator.value;
         operate(firstNum, secondNum, opr);
     }
