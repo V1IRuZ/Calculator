@@ -36,6 +36,39 @@ buttons.forEach((button) => {
 });
 
 
+document.body.addEventListener("keydown", (e) => {
+    const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+    const operators = ["+", "-", "*", "/"];
+
+    const isNumber = numbers.includes(e.key);
+    const isOperator = operators.includes(e.key);
+    let keyPressed = undefined;
+    let keyClass = undefined;
+
+
+    if (isNumber) {
+        keyPressed = e.key;
+        keyClass = "numbers";
+    } else if (isOperator) {
+        keyPressed = e.key;
+        keyClass = "operators";
+    } else if (e.key === "=") {
+        keyPressed = "=";
+    } else if (e.code === "KeyA") {
+        keyPressed = "clear";
+    } else if (e.key === ".") {
+        keyPressed = ".";
+        keyClass = "decimal";
+    } else if (e.code === "Space" || e.code === "Enter") {
+        e.preventDefault();
+        keyPressed = "=";
+    } 
+
+    getCalculation(keyPressed, keyClass);
+        
+    });
+
+
 function clear(selectedButton, selectedClass) {
     if (checkCalculate.result && operator.nextValue) {
         firstNumber.value = checkCalculate.result;
