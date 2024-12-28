@@ -62,7 +62,9 @@ document.body.addEventListener("keydown", (e) => {
     } else if (e.code === "Space" || e.code === "Enter") {
         e.preventDefault();
         keyPressed = "=";
-    } 
+    } else if (e.code = "Backspace") {
+        keyPressed = "backspace";
+    }
 
     getCalculation(keyPressed, keyClass);
         
@@ -111,6 +113,23 @@ function clear(selectedButton, selectedClass) {
         checkCalculate.result = undefined;
         checkCalculate.ready = false;
         displayText = firstNumber.value;
+    }
+};
+
+
+function backSpace(selectedButton) {
+    if (selectedButton === "backspace") {
+        if (firstNumber.active && firstNumber.value.length === 1) {
+            firstNumber.value = "0";
+        } else if (firstNumber.active) {
+            firstNumber.value = firstNumber.value.slice(0, -1);
+        } 
+
+        if (secondNumber.active && secondNumber.value.length === 1) {
+            secondNumber.value = "0";
+        } else if (secondNumber.active) {
+            secondNumber.value = secondNumber.value.slice(0, -1);
+        }
     }
 };
     
@@ -213,7 +232,7 @@ function operate(a, b, operator) {
         if (checkCalculate.result.length < 11) {
             displayText = checkCalculate.result;
         } else {
-            let thereIsDecimal = checkCalculate.result.split("").includes(".")
+            let thereIsDecimal = checkCalculate.result.slice(0,10).split("").includes(".")
             if (thereIsDecimal) {
                 checkCalculate.result = parseFloat(checkCalculate.result).toFixed(10).slice(0, 10);
                 displayText = checkCalculate.result;
@@ -228,6 +247,7 @@ function operate(a, b, operator) {
 
 function getCalculation(selectedButton, selectedClass) {
 
+    backSpace(selectedButton);
     clear(selectedButton, selectedClass);
 
     if (secondNumber.active) {
