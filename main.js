@@ -1,10 +1,17 @@
 const buttons = document.querySelectorAll("button");
 const display = document.querySelector(".display");
 
+const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+const operators = ["+", "-", "*", "/"];
+
 const firstNumber = {
     value: "0",
     active: true,
-    decimal: false
+    decimal: false,
+    negative: {
+        active: false,
+        value: ""
+    }
 };
 
 const operator = {
@@ -16,7 +23,11 @@ const operator = {
 const secondNumber = {
     value: "0",
     active: false,
-    decimal: false
+    decimal: false,
+    negative: {
+        active: false,
+        value: ""
+    }
 };
 
 const checkCalculate = {
@@ -37,9 +48,7 @@ buttons.forEach((button) => {
 
 
 document.body.addEventListener("keydown", (e) => {
-    const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-    const operators = ["+", "-", "*", "/"];
-
+    
     const isNumber = numbers.includes(e.key);
     const isOperator = operators.includes(e.key);
     let keyPressed = undefined;
@@ -63,7 +72,7 @@ document.body.addEventListener("keydown", (e) => {
         e.preventDefault();
         keyPressed = "=";
     } else if (e.code === "Backspace") {
-        keyPressed = "backspace"
+        keyPressed = "backspace";
     }
 
     getCalculation(keyPressed, keyClass);
@@ -75,12 +84,16 @@ function clear(selectedButton, selectedClass) {
     if (checkCalculate.result && operator.nextValue) {
         firstNumber.value = checkCalculate.result;
         firstNumber.active = false;
+        firstNumber.negative.value = "";
+        firstNumber.negative.active = false;
         operator.value = operator.nextValue;
         operator.active = false;
         operator.nextValue = "";
         secondNumber.value = "0";
         secondNumber.active = true;
         secondNumber.decimal = false;
+        secondNumber.negative.active = false;
+        secondNumber.negative.value = "";
         checkCalculate.result = undefined;
         checkCalculate.ready = false;
         displayText = secondNumber.value;
@@ -90,12 +103,16 @@ function clear(selectedButton, selectedClass) {
         firstNumber.value = "0";
         firstNumber.active = true;
         firstNumber.decimal = false;
+        firstNumber.negative.active = false;
+        firstNumber.negative.value = "";
         operator.value = "";
         operator.nextValue = "";
         operator.active = false;
         secondNumber.value = "0";
         secondNumber.active = false;
         secondNumber.decimal = false;
+        secondNumber.negative.active = false;
+        secondNumber.negative.value = "";
         checkCalculate.result = undefined;
         checkCalculate.ready = false;
         displayText = firstNumber.value;
@@ -104,12 +121,16 @@ function clear(selectedButton, selectedClass) {
     if (checkCalculate.result && selectedClass === "operators") {
         firstNumber.value = checkCalculate.result;
         firstNumber.active = false;
+        firstNumber.negative.value = "";
+        firstNumber.negative.active = false;
         operator.active = true;
         operator.value = "";
         operator.nextValue = "";
         secondNumber.value = "0";
         secondNumber.active = false;
         secondNumber.decimal = false;
+        secondNumber.negative.active = false;
+        secondNumber.negative.value = "";
         checkCalculate.result = undefined;
         checkCalculate.ready = false;
         displayText = firstNumber.value;
@@ -149,9 +170,22 @@ function getFirstNumber(selectedButton, selectedClass) {
             }  
         }
     }
+    
+    let checkNotZero = stringToNumber(firstNumber.value);
+
+    if (checkNotZero === 0) {
+        firstNumber.negative.value = "";
+        firstNumber.negative.active = false;
+    } else if (selectedButton === "negative" && !firstNumber.negative.active) {
+        firstNumber.negative.value = "-";
+        firstNumber.negative.active = true;
+    } else if(selectedButton === "negative" && firstNumber.negative.active) {
+        firstNumber.negative.value = "";
+        firstNumber.negative.active = false;
+    }
   
     operator.active = true;
-    displayText = firstNumber.value;
+    displayText = firstNumber.negative.value + firstNumber.value;
     
 };
 
@@ -164,7 +198,7 @@ function getOperator(selectedButton, selectedClass) {
         secondNumber.active = true;
     }
 
-    displayText = secondNumber.value;
+    displayText = secondNumber.negative.value + secondNumber.value;
 };
 
 
@@ -192,8 +226,21 @@ function getSecondNumber(selectedButton, selectedClass) {
         }
     }
 
+    let checkNotZero = stringToNumber(secondNumber.value);
+
+    if (checkNotZero === 0) {
+        secondNumber.negative.value = "";
+        secondNumber.negative.active = false;
+    } else if (selectedButton === "negative" && !secondNumber.negative.active) {
+        secondNumber.negative.value = "-";
+        secondNumber.negative.active = true;
+    } else if(selectedButton === "negative" && secondNumber.negative.active) {
+        secondNumber.negative.value = "";
+        secondNumber.negative.active = false;
+    }
+
     operator.active = false;
-    displayText = secondNumber.value; 
+    displayText = secondNumber.negative.value + secondNumber.value; 
 };
 
 
@@ -263,8 +310,12 @@ function getCalculation(selectedButton, selectedClass) {
     } 
 
     if (checkCalculate.ready) {
-        operate(firstNumber.value, secondNumber.value, operator.value);
+        const firstNum = firstNumber.negative.value + firstNumber.value
+        const secondNum = secondNumber.negative.value + secondNumber.value
+        const opr = operator.value;
+        operate(firstNum, secondNum, opr);
     }
 
     display.textContent = displayText;
+    
 };
