@@ -100,7 +100,9 @@ function clear(selectedButton, selectedClass) {
         displayText = secondNumber.value;
     } 
 
-    if (selectedButton === "clear" || (checkCalculate.result && selectedClass === "numbers")) {
+    if (selectedButton === "clear" || 
+        (checkCalculate.result && (selectedClass === "numbers" || selectedButton === "negative"))) {
+
         firstNumber.value = "0";
         firstNumber.active = true;
         firstNumber.decimal = false;
@@ -318,5 +320,5 @@ function getCalculation(selectedButton, selectedClass) {
     }
 
     display.textContent = displayText;
-    
+
 };
