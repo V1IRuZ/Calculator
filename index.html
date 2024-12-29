@@ -5,31 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>calculator</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.cdnfonts.com/css/lcd" rel="stylesheet">      
     <script src="main.js" defer></script>
 </head>
 <body>
-    <h1>calculator</h1>
+    <div id="frame">
     <div class="display"></div>
     <div class="container">
-        <button class="numbers" id="1">1</button>
-        <button class="numbers" id="2">2</button>
-        <button class="numbers" id="3">3</button>
-        <button class="numbers" id="4">4</button>
-        <button class="numbers" id="5">5</button>
-        <button class="numbers" id="6">6</button>
-        <button class="numbers" id="7">7</button>
-        <button class="numbers" id="8">8</button>
-        <button class="numbers" id="9">9</button>
-        <button class="numbers" id="0">0</button>
-        <button class="decimal" id=".">.</button>
-        <button class="operators" id="+">+</button>
-        <button class="operators" id="-">-</button>
-        <button class="operators" id="*">*</button>
-        <button class="operators" id="/">/</button>
-        <button class="calculate" id="=">=</button>
-        <button id="clear">clear</button>
-        <button id="backspace">></button>
-        <button id="negative">-/+</button>
+        <div class="top-row">
+            <button id="clear">AC</button>
+            <button id="backspace">⌫</button>
+            <button id="negative">&#177</button>
+            <button class="operators" id="/">&divide</button>
+        </div>
+        <div class="button-pad">
+            <div class="num-pad">
+                <button class="numbers" id="1">1</button>
+                <button class="numbers" id="2">2</button>
+                <button class="numbers" id="3">3</button>
+                <button class="numbers" id="4">4</button>
+                <button class="numbers" id="5">5</button>
+                <button class="numbers" id="6">6</button>
+                <button class="numbers" id="7">7</button>
+                <button class="numbers" id="8">8</button>
+                <button class="numbers" id="9">9</button>
+                <button class="numbers" id="0">0</button>
+                <button class="decimal" id=".">.</button>
+            </div>
+            <div class="opr-pad"> 
+                <button class="operators" id="*">&times</button>
+                <button class="operators" id="-">-</button>
+                <button class="operators" id="+">+</button>
+                <button class="calculate" id="=">=</button>
+            </div>
+        </div>
+      
+    </div>
     </div>
 </body>
 </html>

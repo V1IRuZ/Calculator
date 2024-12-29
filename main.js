@@ -288,7 +288,7 @@ function operate(a, b, operator) {
                 checkCalculate.result = parseFloat(checkCalculate.result).toFixed(10).slice(0, 10);
                 displayText = checkCalculate.result;
             } else {
-                displayText = "TOO BIG A NUMBER =(";
+                displayText = "ERROR =(";
                 checkCalculate.result = "0";
             }   
         }

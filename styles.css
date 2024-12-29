@@ -1,7 +1,95 @@
-.display {
-    height: 50px;
-    width: 400px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    margin: 20px;
+}
+
+#frame {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    background-color: #383838df;
+    border-radius: 10px;
+    height: 620px;
+    width: 500px;
     border: 2px solid black;
-    margin: 40px;
-    text-align: right;
+    margin: 50px;
+}
+
+.container {
+    padding-bottom: 5px;
+}
+
+.display {
+    font-family: 'LCD', sans-serif;
+    background-color: rgb(130, 239, 152);
+    font-size: 72px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: right;
+    height: 120px;
+    width: 480px;
+    border: 2px solid black;
+    padding: 20px;
+    margin: 8px;
+    
+
+}
+
+button {
+    border-radius: 10px;
+    height: 80px;
+    width: 115px;
+    font-size: 36px;
+    gap: 5px;
+}
+
+.top-row {
+    display: flex;
+    gap: 5px;
+    padding: 5px 10px;
+}
+
+.button-pad {
+    display: flex;
+    gap: 5px;
+    
+}
+
+.num-pad {
+    padding-left: 10px;
+    justify-content: right;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.numbers {
+    background-color: #ea7d2f;
+}
+
+button#0.numbers {
+    width: 230px;
+}
+
+.opr-pad {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-right: 10px;
+}
+
+button.calculate {
+    color: aliceblue;
+    background-color: #de2222d5;
 }
