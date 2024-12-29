@@ -101,7 +101,8 @@ function clear(selectedButton, selectedClass) {
     } 
 
     if (selectedButton === "clear" || 
-        (checkCalculate.result && (selectedClass === "numbers" || selectedButton === "negative"))) {
+        (checkCalculate.result && 
+            (selectedClass === "numbers" || selectedButton === "negative" || selectedButton === "backspace"))) {
 
         firstNumber.value = "0";
         firstNumber.active = true;
