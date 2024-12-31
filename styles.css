@@ -7,9 +7,6 @@
 body {
     font-family: sans-serif;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
     justify-content: center;
     margin: 20px;
 }
@@ -18,16 +15,12 @@ body {
     display: flex;
     flex-direction: column;
     gap: 40px;
-    background-color: #383838df;
+    background-color: #2a2a2adf;
     border-radius: 10px;
     height: 620px;
     width: 500px;
     border: 2px solid black;
     margin: 50px;
-}
-
-.container {
-    padding-bottom: 5px;
 }
 
 .display {
@@ -42,8 +35,6 @@ body {
     border: 2px solid black;
     padding: 20px;
     margin: 8px;
-    
-
 }
 
 button {
@@ -60,6 +51,16 @@ button {
     padding: 5px 10px;
 }
 
+#clear {
+    color: aliceblue;
+    background-color: #de2222d5;
+}
+
+#backspace {
+    color: aliceblue;
+    background-color: #de2222d5;
+}
+
 .button-pad {
     display: flex;
     gap: 5px;
@@ -68,18 +69,25 @@ button {
 
 .num-pad {
     padding-left: 10px;
-    justify-content: right;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nums {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
 }
 
 .numbers {
-    background-color: #ea7d2f;
+    background-color: #c9c9c9de;
 }
 
-button#0.numbers {
-    width: 230px;
+.bottom-row {
+    display: flex;
+    gap: 5px
+    
 }
 
 .opr-pad {
@@ -89,7 +97,13 @@ button#0.numbers {
     margin-right: 10px;
 }
 
+.operators {
+    background-color: #0a2d9e96;
+    color: aliceblue;
+}
+
 button.calculate {
     color: aliceblue;
     background-color: #de2222d5;
 }
+
