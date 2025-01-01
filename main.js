@@ -30,13 +30,13 @@ const secondNumber = {
     }
 };
 
-const checkCalculate = {
+const showCalculate = {
     result: undefined,
-    ready: false
+    ready: false,
+    displayText: firstNumber.value
 };
 
-let displayText = firstNumber.value;
-display.textContent = displayText;
+display.textContent = showCalculate.displayText;
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -78,12 +78,12 @@ document.body.addEventListener("keydown", (e) => {
 
     getCalculation(keyPressed, keyClass);
         
-    });
+});
 
 
 function clear(selectedButton, selectedClass) {
-    if (checkCalculate.result && operator.nextValue) {
-        firstNumber.value = checkCalculate.result;
+    if (showCalculate.result && operator.nextValue) {
+        firstNumber.value = showCalculate.result;
         firstNumber.active = false;
         firstNumber.negative.value = "";
         firstNumber.negative.active = false;
@@ -95,13 +95,13 @@ function clear(selectedButton, selectedClass) {
         secondNumber.decimal = false;
         secondNumber.negative.active = false;
         secondNumber.negative.value = "";
-        checkCalculate.result = undefined;
-        checkCalculate.ready = false;
-        displayText = secondNumber.value;
+        showCalculate.result = undefined;
+        showCalculate.ready = false;
+        showCalculate.displayText = secondNumber.value;
     } 
 
     if (selectedButton === "clear" || 
-        (checkCalculate.result && 
+        (showCalculate.result && 
             (selectedClass === "numbers" || selectedButton === "negative" || selectedButton === "backspace"))) {
 
         firstNumber.value = "0";
@@ -117,13 +117,13 @@ function clear(selectedButton, selectedClass) {
         secondNumber.decimal = false;
         secondNumber.negative.active = false;
         secondNumber.negative.value = "";
-        checkCalculate.result = undefined;
-        checkCalculate.ready = false;
-        displayText = firstNumber.value;
+        showCalculate.result = undefined;
+        showCalculate.ready = false;
+        showCalculate.displayText = firstNumber.value;
     }
 
-    if (checkCalculate.result && selectedClass === "operators") {
-        firstNumber.value = checkCalculate.result;
+    if (showCalculate.result && selectedClass === "operators") {
+        firstNumber.value = showCalculate.result;
         firstNumber.active = false;
         firstNumber.negative.value = "";
         firstNumber.negative.active = false;
@@ -135,9 +135,9 @@ function clear(selectedButton, selectedClass) {
         secondNumber.decimal = false;
         secondNumber.negative.active = false;
         secondNumber.negative.value = "";
-        checkCalculate.result = undefined;
-        checkCalculate.ready = false;
-        displayText = firstNumber.value;
+        showCalculate.result = undefined;
+        showCalculate.ready = false;
+        showCalculate.displayText = firstNumber.value;
     }
 };
 
@@ -189,7 +189,7 @@ function getFirstNumber(selectedButton, selectedClass) {
     }
   
     operator.active = true;
-    displayText = firstNumber.negative.value + firstNumber.value;
+    showCalculate.displayText = firstNumber.negative.value + firstNumber.value;
     
 };
 
@@ -202,16 +202,16 @@ function getOperator(selectedButton, selectedClass) {
         secondNumber.active = true;
     }
 
-    displayText = secondNumber.negative.value + secondNumber.value;
+    showCalculate.displayText = secondNumber.negative.value + secondNumber.value;
 };
 
 
 function getSecondNumber(selectedButton, selectedClass) {
 
     if (selectedButton === "=") {
-        checkCalculate.ready = true;
+        showCalculate.ready = true;
     } else if (selectedClass === "operators") {
-        checkCalculate.ready = true;
+        showCalculate.ready = true;
         operator.nextValue = selectedButton;
     }
 
@@ -244,7 +244,7 @@ function getSecondNumber(selectedButton, selectedClass) {
     }
 
     operator.active = false;
-    displayText = secondNumber.negative.value + secondNumber.value; 
+    showCalculate.displayText = secondNumber.negative.value + secondNumber.value; 
 };
 
 
@@ -272,24 +272,24 @@ function operate(a, b, operator) {
     ];
 
     if ((a === 0 || b === 0) && operator === "/") {
-        displayText = "Nice try =)";
-        checkCalculate.result = "0";
+        showCalculate.displayText = "ERROR =)";
+        showCalculate.result = "0";
     } else {
-        checkCalculate.result = mathCalculations
+        showCalculate.result = mathCalculations
         .filter((calc) => calc.math === operator)
         .map((calc) => calc.calculate(a, b))
         .join("");
 
-        if (checkCalculate.result.length < 11) {
-            displayText = checkCalculate.result;
+        if (showCalculate.result.length < 11) {
+            showCalculate.displayText = showCalculate.result;
         } else {
-            let thereIsDecimal = checkCalculate.result.slice(0,10).split("").includes(".")
+            let thereIsDecimal = showCalculate.result.slice(0,10).split("").includes(".")
             if (thereIsDecimal) {
-                checkCalculate.result = parseFloat(checkCalculate.result).toFixed(10).slice(0, 10);
-                displayText = checkCalculate.result;
+                showCalculate.result = parseFloat(showCalculate.result).toFixed(10).slice(0, 10);
+                showCalculate.displayText = showCalculate.result;
             } else {
-                displayText = "ERROR =(";
-                checkCalculate.result = "0";
+                showCalculate.displayText = "ERROR =(";
+                showCalculate.result = "0";
             }   
         }
     }
@@ -313,13 +313,13 @@ function getCalculation(selectedButton, selectedClass) {
         getFirstNumber(selectedButton, selectedClass);
     } 
 
-    if (checkCalculate.ready) {
+    if (showCalculate.ready) {
         const firstNum = firstNumber.negative.value + firstNumber.value;
         const secondNum = secondNumber.negative.value + secondNumber.value;
         const opr = operator.value;
         operate(firstNum, secondNum, opr);
     }
 
-    display.textContent = displayText;
+    display.textContent = showCalculate.displayText;
 
 };
