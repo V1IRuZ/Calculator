@@ -51,15 +51,13 @@ button {
     padding: 5px 10px;
 }
 
-#clear {
+#clear, 
+#backspace, 
+.calculate {
     color: aliceblue;
     background-color: #de2222d5;
 }
 
-#backspace {
-    color: aliceblue;
-    background-color: #de2222d5;
-}
 
 .button-pad {
     display: flex;
@@ -86,8 +84,7 @@ button {
 
 .bottom-row {
     display: flex;
-    gap: 5px
-    
+    gap: 5px 
 }
 
 .opr-pad {
@@ -101,9 +98,3 @@ button {
     background-color: #0a2d9e96;
     color: aliceblue;
 }
-
-button.calculate {
-    color: aliceblue;
-    background-color: #de2222d5;
-}
-
